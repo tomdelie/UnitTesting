@@ -4,37 +4,46 @@ module.exports = class User {
     this.lastname = lastname;
     this.age = age;
     this.email = email;
+    this.todoList = null;
   }
 
-  typeCheck(value, type) {
+  addTodoList(todoList) {
+    if (this.todoList === null) {
+      this.todoList = todoList.name;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static typeCheck(value, type) {
     return typeof value === type;
   }
 
-  firstnameIsValid() {
-    return this.typeCheck(this.firstname, 'string') &&
+  isFirstnameValid() {
+    return this.constructor.typeCheck(this.firstname, 'string') &&
       this.firstname.length >= 3;
   }
 
-  lastnameIsValid() {
-    return this.typeCheck(this.lastname, 'string') &&
+  isLastnameValid() {
+    return this.constructor.typeCheck(this.lastname, 'string') &&
       this.lastname.length >= 3;
   }
 
-  ageIsValid() {
-    return this.typeCheck(this.age, 'number') &&
+  isAgeValid() {
+    return this.constructor.typeCheck(this.age, 'number') &&
       this.age > 13;
   }
 
-  emailIsValid() {
-    return this.typeCheck(this.email, 'string') &&
+  isEmailValid() {
+    return this.constructor.typeCheck(this.email, 'string') &&
       this.email.includes('@');
   }
 
   isValid() {
-    return this.firstnameIsValid() &&
-      this.lastnameIsValid() &&
-      this.ageIsValid() &&
-      this.emailIsValid();
+    return this.isFirstnameValid() &&
+      this.isLastnameValid() &&
+      this.isAgeValid() &&
+      this.isEmailValid();
   }
-
 };
