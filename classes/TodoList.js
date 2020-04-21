@@ -1,21 +1,21 @@
 const User = require('./User');
 
 module.exports = class TodoList {
-  constructor(name, content, owner) {
+  constructor(name, content, owner, emailService) {
     this.setName(name);
     this.setContent(content);
     this.dateCreated = new Date();
     this.items = [];
     this.itemsUpdated = null;
     this.setOwner(owner);
+    this.emailService = emailService;
   }
 
   setOwner(owner) {
     if (owner instanceof User) {
       if (owner.isValid()) {
-        if (owner.addTodoList(this)) {
-          this.owner = `${owner.firstname} ${owner.lastname}`;
-        } else {
+        this.owner = `${owner.firstname} ${owner.lastname}`;
+        if (!owner.addTodoList(this)) {
           throw new Error('This user already has a todolist.');
         }
       } else {
@@ -48,6 +48,7 @@ module.exports = class TodoList {
       if (this.items.length < 10) {
         this.items.push(itemContent);
         this.itemsUpdated = new Date();
+        this.emailService.send();
       } else {
         throw new Error(`Maximum item list size reached.`);
       }

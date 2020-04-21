@@ -1,6 +1,8 @@
 const User = require('../classes/User');
 const TodoList = require('../classes/TodoList');
+const sinon = require('sinon');
 const expect = require('chai').expect;
+const EmailService = require('../classes/EmailService');
 
 describe('TodoList class', () => {
 
@@ -45,33 +47,45 @@ describe('TodoList class', () => {
   });
 
   describe('addItem()', () => {
+    let user;
+    let emailServiceMock;
+    let emailService;
+    beforeEach('Setup', () => {
+      user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
+      emailService = new EmailService(user);
+      emailServiceMock = sinon.mock(emailService); // mock creation
+    });
+
     it('should add item to item list if item list length <= 10 and 30 minutes since the last insert', () => {
-      const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
-      const todo = new TodoList('Name', 'Content', user);
-      todo.addItem('Item1');
+      const todo = new TodoList('Name', 'Content', user, emailService);
+      emailServiceMock.expects('send').once(); // rule setup : i except send method to be exactly called once
+      todo.addItem('Item1'); // the method that will call send()
       expect(todo.items.length).to.be.equal(1);
       expect(todo.items[0]).to.be.equal('Item1');
+      expect(emailServiceMock.verify()).to.be.true; // verification that the rule above has been respected
     });
     it('should throw an error because last item was added less than 30 minutes ago', () => {
-      const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
-      const todo = new TodoList('Name', 'Content', user);
+      const todo = new TodoList('Name', 'Content', user, emailService);
+      emailServiceMock.expects('send').once();
       todo.addItem('Item1');
       try {
         todo.addItem('Item2');
       } catch(e) {
         expect(e).to.be.instanceOf(Error);
         expect(todo.items.length).to.be.equal(1);
+        expect(emailServiceMock.verify()).to.be.true; // even though addItem() has been called twice, send() should be called once
       }
     });
     it('should throw an error because item list is full', () => {
-      const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
-      const todo = new TodoList('Name', 'Content', user);
+      const todo = new TodoList('Name', 'Content', user, emailService);
       todo.items = ['Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7', 'Item8', 'Item9', 'Item10'];
+      emailServiceMock.expects('send').never(); // send() should not be called
       try {
         todo.addItem('Item11');
       } catch(e) {
         expect(e).to.be.instanceOf(Error);
         expect(todo.items.length).to.be.equal(10);
+        expect(emailServiceMock.verify()).to.be.true;
       }
     });
   });
