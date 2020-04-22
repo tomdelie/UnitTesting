@@ -1,0 +1,9 @@
+{
+    "all": true,
+    "include": [
+      "classes/*.js"
+    ],
+    "exclude": [
+      "classes/EmailService.js"
+    ]
+}
