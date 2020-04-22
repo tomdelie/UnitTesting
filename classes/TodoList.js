@@ -14,7 +14,7 @@ module.exports = class TodoList {
   setOwner(owner) {
     if (owner instanceof User) {
       if (owner.isValid()) {
-        this.owner = `${owner.firstname} ${owner.lastname}`;
+        this.owner = owner;
         if (!owner.addTodoList(this)) {
           throw new Error('This user already has a todolist.');
         }
@@ -48,7 +48,9 @@ module.exports = class TodoList {
       if (this.items.length < 10) {
         this.items.push(itemContent);
         this.itemsUpdated = new Date();
-        this.emailService.send();
+        if (this.owner.age >= 18) {
+          this.emailService.send();
+        }
       } else {
         throw new Error(`Maximum item list size reached.`);
       }

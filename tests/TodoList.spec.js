@@ -56,13 +56,22 @@ describe('TodoList class', () => {
       emailServiceMock = sinon.mock(emailService); // mock creation
     });
 
-    it('should add item to item list if item list length <= 10 and 30 minutes since the last insert', () => {
+    it('should add item to item list if item list length <= 10 and 30 minutes since the last insert AND send one email if user is older than 18yo', () => {
       const todo = new TodoList('Name', 'Content', user, emailService);
       emailServiceMock.expects('send').once(); // rule setup : i except send method to be exactly called once
       todo.addItem('Item1'); // the method that will call send()
       expect(todo.items.length).to.be.equal(1);
       expect(todo.items[0]).to.be.equal('Item1');
       expect(emailServiceMock.verify()).to.be.true; // verification that the rule above has been respected
+    });
+    it('should add item to item list if item list length <= 10 and 30 minutes since the last insert AND send 0 email if user is younger than 18yo', () => {
+      user.age = 16;
+      const todo = new TodoList('Name', 'Content', user, emailService);
+      emailServiceMock.expects('send').never(); 
+      todo.addItem('Item1');
+      expect(todo.items.length).to.be.equal(1);
+      expect(todo.items[0]).to.be.equal('Item1');
+      expect(emailServiceMock.verify()).to.be.true; 
     });
     it('should throw an error because last item was added less than 30 minutes ago', () => {
       const todo = new TodoList('Name', 'Content', user, emailService);
@@ -94,7 +103,7 @@ describe('TodoList class', () => {
     it('should set the owner if owner is valid and does not already have a todoList', () => {
       const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
       const todo = new TodoList('Name', 'Content', user);
-      expect(todo.owner).to.be.equal(`${user.firstname} ${user.lastname}`);
+      expect(todo.owner).to.be.deep.equal(user);
       expect(user.todoList).to.be.deep.equal(todo.name);
     });
     it('should throw an error if owner is valid and do already have a todoList', () => {
