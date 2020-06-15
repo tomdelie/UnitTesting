@@ -1,4 +1,4 @@
-const app = require('../api');
+const app = require('../classes/api');
 const chai = require('chai');
 const { expect } = chai;
 const chaiHttp = require('chai-http');

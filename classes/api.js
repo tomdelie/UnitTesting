@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require("body-parser");
-const User = require('./classes/User');
-const EmailService = require('./classes/EmailService');
-const TodoList = require('./classes/TodoList');
+const User = require('./User');
+const EmailService = require('./EmailService');
+const TodoList = require('./TodoList');
 
 const app = express();
 

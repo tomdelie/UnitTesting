@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha 'tests/*.spec.js'",
+    "test": "nyc mocha 'tests/*.spec.js' --exit",
     "start": "nodemon api.js",
     "jsonserver": "json-server --watch database/db.json --port 3004"
   },
