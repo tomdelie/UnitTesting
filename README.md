@@ -1,4 +1,5 @@
 # Unit Testing
+![tests](https://github.com/tomdelie/UnitTesting/workflows/tests/badge.svg?branch=master&event=push)
 
 Training project for unit testing course.
 
