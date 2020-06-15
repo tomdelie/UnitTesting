@@ -21,7 +21,7 @@ module.exports = class User {
   }
 
   isFirstnameValid() {
-    return this.constructor.typeCheck(this.firstname, 'string') &&
+    return User.typeCheck(this.firstname, 'string') &&
       this.firstname.length >= 3;
   }
 

@@ -1,0 +1,22 @@
+{
+  "todolists": [
+    {
+      "name":"Name",
+      "content":"Content",
+      "dateCreated":"2020-05-06T15:01:29.387Z",
+      "items":[],
+      "itemsUpdated":null,
+        "owner":{
+          "firstname":"Tom",
+          "lastname":"Délié",
+          "age":21,
+          "email":"tom@gmail.com",
+          "todoList":"Name"
+        },
+          "emailService":"service"}
+  ],
+  "users": [
+    {"firstname":"Tom","lastname":"Délié","age":21,"email":"tom@gmail.com","todoList":null},
+    {"firstname":"Pierre","lastname":"Trucmuche","age":11,"email":"pierre@gmail.com","todoList":null}
+  ]
+}
