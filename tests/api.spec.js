@@ -11,18 +11,21 @@ describe('API', () => {
             done();    
         });
     });
+
     it('GET /users/:id', (done) => {
         chai.request(app).get('/users/1').end((err, res) => {
             expect(res).to.have.status(200);
             done();    
         });
     });
+    
     it('GET /todolists', (done) => {
         chai.request(app).get('/todolists').end((err, res) => {
             expect(res).to.have.status(200);
             done();    
         });
     });
+    
     it('POST /users/:userId', (done) => {
         chai.request(app).post('/users/1').send({}).end((err, res) => {
             expect(res).to.have.status(200);
