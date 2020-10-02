@@ -53,16 +53,16 @@ describe('TodoList class', () => {
     beforeEach('Setup', () => {
       user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
       emailService = new EmailService(user);
-      emailServiceMock = sinon.mock(emailService); // mock creation
+      emailServiceMock = sinon.mock(emailService);
     });
 
     it('should add item to item list if item list length <= 10 and 30 minutes since the last insert AND send one email if user is older than 18yo', () => {
       const todo = new TodoList('Name', 'Content', user, emailService);
-      emailServiceMock.expects('send').once(); // rule setup : i except send method to be exactly called once
-      todo.addItem('Item1'); // the method that will call send()
+      emailServiceMock.expects('send').once();
+      todo.addItem('Item1');
       expect(todo.items.length).to.be.equal(1);
       expect(todo.items[0]).to.be.equal('Item1');
-      expect(emailServiceMock.verify()).to.be.true; // verification that the rule above has been respected
+      expect(emailServiceMock.verify()).to.be.true;
     });
     it('should add item to item list if item list length <= 10 and 30 minutes since the last insert AND send 0 email if user is younger than 18yo', () => {
       user.age = 16;
@@ -82,13 +82,13 @@ describe('TodoList class', () => {
       } catch(e) {
         expect(e).to.be.instanceOf(Error);
         expect(todo.items.length).to.be.equal(1);
-        expect(emailServiceMock.verify()).to.be.true; // even though addItem() has been called twice, send() should be called once
+        expect(emailServiceMock.verify()).to.be.true;
       }
     });
     it('should throw an error because item list is full', () => {
       const todo = new TodoList('Name', 'Content', user, emailService);
       todo.items = ['Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7', 'Item8', 'Item9', 'Item10'];
-      emailServiceMock.expects('send').never(); // send() should not be called
+      emailServiceMock.expects('send').never();
       try {
         todo.addItem('Item11');
       } catch(e) {
