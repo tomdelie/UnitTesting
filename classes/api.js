@@ -9,9 +9,6 @@ const app = express();
 
 const portNo = process.env.PORT || 4000;
 
-/**
- * Get all users
- */
 app.get("/users", async (req, res) => {
     try {
         const user1 = new User('Tom', 'Délié', 21, 'tom@gmail.com');
@@ -23,9 +20,6 @@ app.get("/users", async (req, res) => {
     }
 });
 
-/**
- * Get a user
- */
 app.get("/users/:id", async (req, res) => {
     try {
         const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
@@ -36,9 +30,6 @@ app.get("/users/:id", async (req, res) => {
 });
 
 
-/**
- * Get todolists
- */
 app.get("/todolists", async (req, res) => {
     try {
         const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
@@ -49,10 +40,6 @@ app.get("/todolists", async (req, res) => {
     }
 });
 
-
-/**
- * Add item
- */
 app.post("/users/:userId", async(req, res) => {
     try {
         res.status(200).send('Item added');
@@ -60,7 +47,6 @@ app.post("/users/:userId", async(req, res) => {
         res.status(500).send(e);
     }
 });
-
 
 app.listen(portNo, () => {
     console.log(`> API running at http://localhost:${portNo}`);
