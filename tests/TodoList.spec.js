@@ -14,11 +14,8 @@ describe('TodoList class', () => {
       expect(todo.content).to.be.equal(content);
     });
     it('should throw an error if its new value.length > 100', () => {
-      try {
-        new TodoList('name', "Content that exceed the length limit. I got to throw on and go on, you know i gots to flow on, selectors on the radio play us 'cause we're friendly for ozone.");
-      } catch (e) {
-        expect(e).to.be.an.instanceOf(Error);
-      }
+      const func = function () { new TodoList('name', "Content that exceed the length limit. I got to throw on and go on, you know i gots to flow on, selectors on the radio play us 'cause we're friendly for ozone.") };
+      expect(func).to.throw(Error);
     });
   });
 
@@ -31,18 +28,13 @@ describe('TodoList class', () => {
     });
     it('should throw an error if name.length === 0', () => {
       const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
-      try {
-        new TodoList('', 'content', user);
-      } catch (e) {
-        expect(e).to.be.an.instanceOf(Error);
-      }
+      const func = function () { new TodoList('', 'content', user) };
+
+      expect(func).to.throw(Error);
     });
     it('should throw an error if name.length > 50', () => {
-      try {
-        new TodoList('Name that exceed the size limit i want to exceed this limit please', 'content');
-      } catch (e) {
-        expect(e).to.be.an.instanceOf(Error);
-      }
+      const func = function () { new TodoList('Name that exceed the size limit i want to exceed this limit please', 'content') };
+      expect(func).to.throw(Error);
     });
   });
 
@@ -67,35 +59,27 @@ describe('TodoList class', () => {
     it('should add item to item list if item list length <= 10 and 30 minutes since the last insert AND send 0 email if user is younger than 18yo', () => {
       user.age = 16;
       const todo = new TodoList('Name', 'Content', user, emailService);
-      emailServiceMock.expects('send').never(); 
+      emailServiceMock.expects('send').never();
       todo.addItem('Item1');
       expect(todo.items.length).to.be.equal(1);
       expect(todo.items[0]).to.be.equal('Item1');
-      expect(emailServiceMock.verify()).to.be.true; 
+      expect(emailServiceMock.verify()).to.be.true;
     });
     it('should throw an error because last item was added less than 30 minutes ago', () => {
       const todo = new TodoList('Name', 'Content', user, emailService);
       emailServiceMock.expects('send').once();
       todo.addItem('Item1');
-      try {
-        todo.addItem('Item2');
-      } catch(e) {
-        expect(e).to.be.instanceOf(Error);
-        expect(todo.items.length).to.be.equal(1);
-        expect(emailServiceMock.verify()).to.be.true;
-      }
+      expect(todo.addItem.bind(todo, 'Item2')).to.throw(Error);
+      expect(todo.items.length).to.be.equal(1);
+      expect(emailServiceMock.verify()).to.be.true;
     });
     it('should throw an error because item list is full', () => {
       const todo = new TodoList('Name', 'Content', user, emailService);
       todo.items = ['Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7', 'Item8', 'Item9', 'Item10'];
       emailServiceMock.expects('send').never();
-      try {
-        todo.addItem('Item11');
-      } catch(e) {
-        expect(e).to.be.instanceOf(Error);
-        expect(todo.items.length).to.be.equal(10);
-        expect(emailServiceMock.verify()).to.be.true;
-      }
+      expect(todo.addItem.bind(todo, 'Item11')).to.throw(Error);
+      expect(todo.items.length).to.be.equal(10);
+      expect(emailServiceMock.verify()).to.be.true;
     });
   });
 
@@ -109,33 +93,18 @@ describe('TodoList class', () => {
     it('should throw an error if owner is valid and do already have a todoList', () => {
       const user = new User('Tom', 'Délié', 21, 'tom@gmail.com');
       user.todoList = 'todoList';
-      let todo;
-      try {
-        todo = new TodoList('Name', 'Content', user);
-      } catch(e) {
-        expect(e).to.be.instanceOf(Error);
-        expect(todo).to.be.undefined;
-      }
+      const func = function () { new TodoList('Name', 'Content', user) };
+      expect(func).to.throw(Error);
     });
     it('should throw an error if owner is not valid', () => {
       const user = new User('Tom', 'Délié', 1, 'tom@gmail.com');
-      let todo;
-      try {
-        todo = new TodoList('Name', 'Content', user);
-      } catch(e) {
-        expect(e).to.be.instanceOf(Error);
-        expect(todo).to.be.undefined;
-      }
+      const func = function () { new TodoList('Name', 'Content', user) };
+      expect(func).to.throw(Error);
     });
     it('should throw an error if owner is not an instance of User', () => {
-      const user = {firstname: 'Tom', lastname: 'Délié', age: 1, email: 'tom@gmail.com'};
-      let todo;
-      try {
-        todo = new TodoList('Name', 'Content', user);
-      } catch(e) {
-        expect(e).to.be.instanceOf(Error);
-        expect(todo).to.be.undefined;
-      }
+      const user = { firstname: 'Tom', lastname: 'Délié', age: 1, email: 'tom@gmail.com' };
+      const func = function () { new TodoList('Name', 'Content', user) };
+      expect(func).to.throw(Error);
     });
   });
 });
